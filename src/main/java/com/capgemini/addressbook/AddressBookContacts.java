@@ -129,5 +129,4 @@ public class AddressBookContacts {
 		return "First name : " + firstName + " ,Last name : " + lastName + " ,Address : " + address + " ,City : " + city
 				+ " ,State : " + state + " ,Zip : " + zip + " ,Phone num : " + ph_no + " ,Email : " + email;
 	}
-
 }

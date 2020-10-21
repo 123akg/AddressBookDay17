@@ -1,6 +1,9 @@
 package com.capgemini.addressbook;
 
 
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Reader;
 import java.io.Writer;
@@ -8,11 +11,13 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
-
+import com.google.gson.Gson;
 import com.opencsv.CSVWriter;
 import com.opencsv.bean.CsvToBean;
 import com.opencsv.bean.CsvToBeanBuilder;
@@ -28,6 +33,7 @@ public class AddressBook {
 
 	public static String HOME = System.getProperty("user.home");
 	public static String DIRECTORY = "addressbookoutputfile";
+	public static String DIRECTORY_JSON = "jsonoutputfile";
 
 	String addressBookName;
 	Scanner sc = new Scanner(System.in);
@@ -198,4 +204,44 @@ public class AddressBook {
 			}
 		}
 	}
+
+	// UC 15
+
+	public void writeToJsonFile(String AddressBookName) throws IOException {
+		Path pathLoc = Paths.get("C:\\Users\\abhij\\eclipse-workspace\\AddressBook\\src\\main\\java\\jsonoutputfile");
+		if (Files.notExists(pathLoc))
+			Files.createDirectory(pathLoc);
+
+		String SAMPLE_JSON_FILE = "C:\\Users\\abhij\\eclipse-workspace\\AddressBook\\src\\main\\java\\jsonoutputfile" +".json";
+		Gson gson = new Gson();
+		String json = gson.toJson(list);
+		FileWriter writer = new FileWriter(SAMPLE_JSON_FILE);
+		writer.write(json);
+		writer.close();
+	}
+
+	public void readFromJsonFile(String AddressBookName) throws IOException {
+		Path pathLoc = Paths.get("C:\\Users\\abhij\\eclipse-workspace\\AddressBook\\src\\main\\java\\jsonoutputfile");
+		if (Files.notExists(pathLoc))
+			Files.createDirectory(pathLoc);
+
+		String SAMPLE_JSON_FILE = "C:\\Users\\abhij\\eclipse-workspace\\AddressBook\\src\\main\\java\\jsonoutputfile"+ ".json";
+		Gson gson = new Gson();
+
+		BufferedReader br = new BufferedReader(new FileReader(SAMPLE_JSON_FILE));
+		AddressBookContacts[] contact = gson.fromJson(br, AddressBookContacts[].class);
+		List<AddressBookContacts> contactList = Arrays.asList(contact);
+		for (AddressBookContacts a : contactList) {
+			System.out.println("Firstname : " + a.firstName);
+			System.out.println("Lastname : " + a.lastName);
+			System.out.println("Address : " + a.address);
+			System.out.println("City : " + a.city);
+			System.out.println("State : " + a.state);
+			System.out.println("Zip : " + a.zip);
+			System.out.println("Phone number : " + a.ph_no);
+			System.out.println("Email : " + a.email);
+			System.out.println("**********************************");
+		}
+	}
+
 }
